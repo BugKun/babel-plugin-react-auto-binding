@@ -8,7 +8,8 @@ class App extends Component {
         super(props);
 
         this.state = {
-            text: "abc"
+            view: false,
+            text: ''
         }
 
     }
@@ -19,16 +20,30 @@ class App extends Component {
         });
     }
 
+    handleClick() {
+        this.setState({
+            view: true
+        });
+    }
+
     render() {
-        const { text } = this.state;
+        const { text, view } = this.state;
 
         return (
            <div className="main">
-               <h4>React auto bind example：</h4>
+               <h4>The example of <i>React auto binding</i>：</h4>
                <div>
-                    Text:
+                    Text: 
                     <input type="text" value={text} onChange={this.setTextVal}/>
                </div>
+               <br />
+               <div>
+                    <button onClick={this.handleClick}>Click me</button>
+               </div>
+               <br />
+                {
+                   (view) && <div>React auto binding succeed</div>
+                }
            </div>
         )
     }

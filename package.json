@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-react-auto-binding",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Babel plugin for React component to take event handler to bind context automatically.",
   "main": "./src/index.js",
   "scripts": {
