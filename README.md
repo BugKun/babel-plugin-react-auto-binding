@@ -29,7 +29,13 @@ class App extends React.Component{
   }
   render() {
     return (
-      <div onClick={this.handleClick}></div>
+      <div>
+        <button onClick={this.handleClick}>Click me</button>
+        <br />
+        {
+            (view) && <div>React auto binding succeed</div>
+        }
+      </div>
     )
   }
 }
@@ -59,7 +65,13 @@ class App extends React.Component{
   }
   render() {
     return (
-      <div onClick={this.handleClick}></div>
+      <div>
+        <button onClick={this.handleClick}>Click me</button>
+        <br />
+        {
+            (view) && <div>React auto binding succeed</div>
+        }
+      </div>
     )
   }
 }
