@@ -18,7 +18,7 @@ class App extends React.Component{
   constructor(props) {
     super(props)
     this.state = {
-        view: false
+      view: false
     }
     this.handleClick = this.handleClick.bind(this) // binding method
   }
@@ -46,15 +46,15 @@ Instead,
 class App extends React.Component{
   constructor(props) {
     super(props)
-     this.state = {
-        view: false
+    this.state = {
+      view: false
     }
     // needn't binding method
   }
   
   handleClick(e) {
     this.setSate({
-      key: 'value'
+      view: 'value'
     })
   }
   render() {
