@@ -42,7 +42,7 @@ class App extends Component {
                </div>
                <br />
                 {
-                   (view) && <div>React auto binding succeed</div>
+                   (view) && <div>React auto binding succeeded</div>
                 }
            </div>
         )
