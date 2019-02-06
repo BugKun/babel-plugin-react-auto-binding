@@ -3,10 +3,10 @@ function hasThis(node) {
         if(node.type === 'ThisExpression') {
             return true;
         }else {
-            let has = false;
+            let existence = false;
             for(let i in node) {
-                has = hasThis(node[i]);
-                if(has) {
+                existence = hasThis(node[i]);
+                if(existence) {
                     return true;
                 }
             }
@@ -31,47 +31,54 @@ function isReactClass(path) {
 }
 
 
-module.exports = ({ types: babelTypes, template }) => ({
-    visitor: {
-        ClassDeclaration(path) {
-            if(!isReactClass(path)) return;
-            const func = path.node.body.body,
-                {
-                    ClassMethod,
-                    BlockStatement,
-                    Identifier,
-                } = babelTypes;
-            let bind = [], constructorIndex = undefined;
-            for(let i = 0; i < func.length; i++) {
-                if(func[i].type === 'ClassMethod') {
-                    if(func[i].kind === 'method') {
-                        const funcName = func[i].key.name;
-                        if(hasThis(func[i]) && funcName !== 'render')
-                            bind.push(template(`this.${funcName} = this.${funcName}.bind(this)`)());
-                    }
-                    if(func[i].kind === 'constructor') {
-                        constructorIndex = i;
+module.exports = ({ types: babelTypes, template }) => {
+    const superTemplate = template(`super(props);`)();
+
+
+    return {
+        visitor: {
+            ClassDeclaration(path) {
+                if(!isReactClass(path)) return;
+                const funcList = path.node.body.body,
+                    {
+                        ClassMethod,
+                        BlockStatement,
+                        Identifier,
+                    } = babelTypes;
+                let bindList = [], constructorIndex = undefined;
+                for(let i = 0; i < funcList.length; i++) {
+                    if(funcList[i].type === 'ClassMethod') {
+                        if(funcList[i].kind === 'method') {
+                            const funcName = funcList[i].key.name;
+                            if(hasThis(funcList[i]) && funcName !== 'render')
+                                bindList.push(template(`this.${funcName} = this.${funcName}.bind(this)`)());
+                        }
+                        if(funcList[i].kind === 'constructor') {
+                            constructorIndex = i;
+                        }
                     }
                 }
-            }
-
-            if(bind.length > 0 ) {
-                if(constructorIndex > -1) {
-                    func[constructorIndex].body.body.push(...bind)
-                }else {
-                    func.push(
-                        ClassMethod(
-                            'constructor',
-                            Identifier('constructor'),
-                            [Identifier('props')],
-                            BlockStatement([
-                                template(`super(props);`)(),
-                                ...bind
-                            ])
+    
+                if(bindList.length > 0 ) {
+                    if(constructorIndex > -1) {
+                        funcList[constructorIndex].body.body.push(...bindList)
+                    }else {
+                        funcList.push(
+                            ClassMethod(
+                                'constructor',
+                                Identifier('constructor'),
+                                [
+                                    Identifier('props')
+                                ],
+                                BlockStatement([
+                                    superTemplate,
+                                    ...bindList
+                                ])
+                            )
                         )
-                    )
+                    }
                 }
             }
         }
     }
-});
+};
