@@ -10,8 +10,7 @@ class App extends Component {
         this.state = {
             view: false,
             text: ''
-        }
-
+        };
     }
 
     setTextVal(e) {
